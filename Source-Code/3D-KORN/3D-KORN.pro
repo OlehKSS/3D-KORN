@@ -404,7 +404,8 @@ SOURCES += main.cpp\
     tdk_sensorcontroller.cpp \
     tdk_kinectv2sensor.cpp \
     tdk_turntable.cpp \
-    TDK_PointOperations.cpp
+    TDK_PointOperations.cpp \
+    tdk_3dfeatureservice.cpp
 
 HEADERS  += mainwindow.h \
     tdk_centralwidget.h \
@@ -418,6 +419,7 @@ HEADERS  += mainwindow.h \
     tdk_sensorcontroller.h \
     tdk_kinectv2sensor.h \
     tdk_turntable.h \
-    TDK_PointOperations.h
+    TDK_PointOperations.h \
+    tdk_3dfeatureservice.h
 
 FORMS    += mainwindow.ui
