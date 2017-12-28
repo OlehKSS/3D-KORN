@@ -27,11 +27,24 @@ public:
     void setInputPointCloud(pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inPointCloudPtr);
     void setInputPointCloud(pcl::PointCloud<pcl::PointXYZRGB> &inPointCloud);
 
+    //setting and getting configuration paramaters
+    void setRadiusOfGradientSearch(float radius);
+    void setRadiusOfNormalSearch(float radius);
+    void setRadiusOfRIFTSearch(float radius);
+
+    float getRadiusOfGradientSearch();
+    float getRadiusOfNormalSearch();
+    float getRadiusOfRIFTSearch();
+
+
     //method for running feature detection
     pcl::PointCloud<pcl::PointXYZI>::Ptr& getFeatures();
 
 private:
     pcl::PointCloud<pcl::PointXYZRGB>::Ptr mv_InPointCloudPtr;
+    float mv_RadiusOfNormalSearch;
+    float mv_RadiusOfGradientSearch;
+    float mv_RadiusOfRIFTSearch;
 
     pcl::PointCloud<pcl::PointXYZI>::Ptr& runRIFTFeatureDetection();
 };

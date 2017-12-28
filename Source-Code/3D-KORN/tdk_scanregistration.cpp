@@ -1,6 +1,8 @@
 #include "tdk_scanregistration.h"
 #include <QDebug>
 
+#include "tdk_3dfeatureservice.h"
+
 using namespace std;
 
 TDK_ScanRegistration::TDK_ScanRegistration()
@@ -172,6 +174,13 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr TDK_ScanRegistration::postProcess_and_get
         qDebug() << "ScanRegistration: PostProcessing without prealignment.";
         mv_ICPPost_MaxCorrespondanceDistance = 0.15;
     }
+
+    TDK_3DFeatureService featureService{};
+    featureService.setInputPointCloud(mv_originalPCs[0]);
+    featureService.setRadiusOfNormalSearch(mv_normalRadiusSearch);
+    featureService.setRadiusOfGradientSearch(mv_normalRadiusSearch*3);
+    featureService.setRadiusOfRIFTSearch(mv_normalRadiusSearch*3);
+    featureService.getFeatures();
 
     pcl::IterativeClosestPoint<pcl::PointXYZRGB, pcl::PointXYZRGB>::Ptr icp(
                 new pcl::IterativeClosestPoint<pcl::PointXYZRGB, pcl::PointXYZRGB>());
