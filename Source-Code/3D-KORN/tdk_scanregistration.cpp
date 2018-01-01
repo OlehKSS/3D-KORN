@@ -1,7 +1,5 @@
 #include "tdk_scanregistration.h"
-
 #include <QDebug>
-#include <algorithm>
 
 using namespace std;
 
@@ -163,7 +161,7 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr TDK_ScanRegistration::getRoughlyAlignedPC
 
 /////////////////////////////////////////////////////
 
-pcl::PointCloud<pcl::PointXYZRGB>::Ptr TDK_ScanRegistration::postProcess_and_getAlignedPC()
+pcl::PointCloud<pcl::PointXYZRGB>::Ptr TDK_ScanRegistration::Process_and_getAlignedPC()
 {
     if(! mv_registerInRealTime){
         mv_registerInRealTime = true;
@@ -576,7 +574,8 @@ TDK_ScanRegistration::set_ICP_MaxCorrespondenceDistance(float value)
 }
 
 /////////////////////////////////////////////////////
-void PointCloudXYZRGBtoXYZ(
+void
+PointCloudXYZRGBtoXYZ(
         const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &in,
         pcl::PointCloud<pcl::PointXYZ>::Ptr &out
         )
@@ -588,19 +587,4 @@ void PointCloudXYZRGBtoXYZ(
         out->points[i].y = in->points[i].y;
         out->points[i].z = in->points[i].z;
     }
-}
-
-
-void tdk_PointCloudXYZRGBtoXYZI(
-        const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &in,
-        pcl::PointCloud<pcl::PointXYZI>::Ptr &out
-        )
-{
-    for_each(in->begin(),
-            in->end(),
-            [&out] (pcl::PointXYZRGB pRGB) {
-        pcl::PointXYZI pI{};
-        pcl::PointXYZRGBtoXYZI(pRGB, pI);
-        out->push_back(pI);
-    });
 }
