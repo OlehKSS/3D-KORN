@@ -53,10 +53,13 @@ void TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(const PointCloud<pcl::PointXYZRGB>::
 
 void TDK_Meshing::mf_Poisson(const PointCloud<PointXYZ>::Ptr &mv_PointCloudInput,
                                    pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
-
+    //Perform downsampling
+    pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_downsampled (new  pcl::PointCloud<pcl::PointXYZ>);
+    TDK_Filters::mf_FilterVoxelGridDownsample(mv_PointCloudInput, mv_cloud_downsampled, 0.01);
+    
     //Perform outlier removal
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_filtered (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_PointCloudInput, mv_cloud_filtered, 5);
+    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_cloud_downsampled, mv_cloud_filtered, 5);
 
     //Apply the MLS smoothing filter
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_smoothed (new  pcl::PointCloud<pcl::PointXYZ>);
@@ -90,12 +93,16 @@ void TDK_Meshing::mf_Poisson(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudIn
                                    pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
 
     //Convert from RGBXYZ to XYZ
-    PointCloud<PointXYZ>::Ptr mv_PointCloudInput  ((new PointCloud<PointXYZ>)) ;
+    PointCloud<PointXYZ>::Ptr mv_PointCloudInput  (new PointCloud<PointXYZ>) ;
     TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(mv_PointCloudInputRGB, mv_PointCloudInput) ;
+    
+    //Perform downsampling
+    pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_downsampled (new pcl::PointCloud<pcl::PointXYZ>);
+    TDK_Filters::mf_FilterVoxelGridDownsample(mv_PointCloudInput, mv_cloud_downsampled, 0.01);
 
     //Perform outlier removal
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_filtered (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_PointCloudInput, mv_cloud_filtered, 5);
+    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_cloud_downsampled, mv_cloud_filtered, 5);
 
     //Apply the MLS smoothing filter
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_smoothed (new  pcl::PointCloud<pcl::PointXYZ>);
