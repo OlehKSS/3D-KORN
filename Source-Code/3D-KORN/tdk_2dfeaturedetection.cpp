@@ -62,7 +62,7 @@ void TDK_2DFeatureDetection::getMatchedFeatures(const pcl::PointCloud<pcl::Point
     outKeyPointsTrain->clear();
     outKeyPointsQuery->clear();
 
-    matchFeatures(trainImg, keyPtsRobustTrain, queryImg, keyPtsRobustQuery, matchesRobust, true);
+    matchFeatures(trainImg, keyPtsRobustTrain, queryImg, keyPtsRobustQuery, matchesRobust);
     std::vector<cv::DMatch> shortMatch;
     copy(matchesRobust.begin(), matchesRobust.begin() + 4, std::back_insert_iterator<std::vector<cv::DMatch>>(shortMatch));
     showMatchedFeatures2D(trainImg, keyPtsRobustTrain, queryImg, keyPtsRobustQuery, matchesRobust);
@@ -81,7 +81,8 @@ void TDK_2DFeatureDetection::getMatchedFeatures(const pcl::PointCloud<pcl::Point
         qDebug() << "Robust matches number " << matchesRobust.size();
 
         //Limit number of selected matches to first 10
-        auto itEnd = (matchesRobust.size() >= 10) ? (matchesRobust.begin() + 10) : matchesRobust.end();
+//        auto itEnd = (matchesRobust.size() >= 10) ? (matchesRobust.begin() + 10) : matchesRobust.end();
+        auto itEnd = matchesRobust.end();
 
         for(auto it = matchesRobust.begin(); it != itEnd; it++)
         {
@@ -363,7 +364,8 @@ void TDK_2DFeatureDetection::matchFeatures(const cv::Mat &rgb_1,
     qDebug() << "Descriptors calculated, descriptors type: " << descriptors_1.type();
 
     //-- Feature matching using descriptors
-    cv::FlannBasedMatcher matcher;
+//    cv::FlannBasedMatcher matcher;
+    cv::BFMatcher matcher(cv::NORM_L2, true);
     matcher.match(descriptors_1, descriptors_2, matches);
 
     // SIFT descriptor for CV_32F has type 5

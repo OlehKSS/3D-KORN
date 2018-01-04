@@ -176,8 +176,6 @@ pcl::PointCloud<pcl::PointXYZRGB>::Ptr TDK_ScanRegistration::Process_and_getAlig
     }
 
     // prove feature detection
-    //pcl::PointCloud<pcl::PointXYZRGB>::Ptr trainPointCloud(new pcl::PointCloud<pcl::PointXYZRGB>());
-    //pcl::PointCloud<pcl::PointXYZRGB>::Ptr queryPointCloud(new pcl::PointCloud<pcl::PointXYZRGB>());
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr trainKeyPoints(new pcl::PointCloud<pcl::PointXYZ>());
     pcl::PointCloud<pcl::PointXYZ>::Ptr queryKeyPoints(new pcl::PointCloud<pcl::PointXYZ>());
@@ -634,30 +632,31 @@ void TDK_ScanRegistration::MatchRegistration(pcl::PointCloud<pcl::PointXYZRGB>::
 
     // Transform the sample cloud to reference cloud coordinate
     pcl::transformPointCloud(*sampleCloud, *fusedCloud, transMat);
-    for(int i=0; i<refCloud->size(); i++)
-    {
-            fusedCloud->push_back(refCloud->at(i));
-    }
+//    for(int i=0; i<refCloud->size(); i++)
+//    {
+//            fusedCloud->push_back(refCloud->at(i));
+//    }
     qDebug() << "transformPointCloud";
 
-//    // Registration refinement using ICP with all points
-//    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_in (new pcl::PointCloud<pcl::PointXYZ>);
-//    copyColor2XYZ(fusedCloud, cloud_in);
-//    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_out(new pcl::PointCloud<pcl::PointXYZ>);
-//    copyColor2XYZ(refCloud, cloud_out);
-//    icp.setInputCloud(cloud_in);
-//    icp.setInputTarget(cloud_out);
-//    icp.align(aligned);
-//    transMat = icp.getFinalTransformation();
-//    pcl::transformPointCloud(*fusedCloud, *fusedCloud, transMat);
-//    qDebug() << "Registration refinement done";
-//    // Fuse with the reference cloud
-//    for(int i=0; i<refCloud->size(); i++)
-//      {
-//        fusedCloud->push_back(refCloud->at(i));
-//      }
+    // Registration refinement using ICP with all points
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_in (new pcl::PointCloud<pcl::PointXYZ>);
+    copyColor2XYZ(fusedCloud, cloud_in);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_out(new pcl::PointCloud<pcl::PointXYZ>);
+    copyColor2XYZ(refCloud, cloud_out);
+    icp.setInputCloud(cloud_in);
+    icp.setInputTarget(cloud_out);
+    icp.align(aligned);
 
-//     qDebug() << "Match registration completed";
+    Eigen::Matrix4f transMat1 = icp.getFinalTransformation();
+    pcl::transformPointCloud(*fusedCloud, *fusedCloud, transMat1);
+    qDebug() << "Registration refinement done";
+    // Fuse with the reference cloud
+    for(int i=0; i<refCloud->size(); i++)
+      {
+        fusedCloud->push_back(refCloud->at(i));
+      }
+
+     qDebug() << "Match registration completed";
 }
 
 /////////////////////////////////////////////////////
