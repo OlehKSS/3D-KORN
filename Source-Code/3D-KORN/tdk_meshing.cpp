@@ -166,8 +166,7 @@ void TDK_Meshing::mf_Greedy_Projection_Triangulation(const PointCloud<PointXYZ>:
     gp3.setInputCloud (mv_PointNormal1);
     gp3.setSearchMethod (tree2);
     gp3.reconstruct (*triangles);
-    std::vector<int> parts = gp3.getPartIDs();
-    std::vector<int> states = gp3.getPointStates();
+
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(triangles,mv_MeshesOutput1);
@@ -213,8 +212,6 @@ void TDK_Meshing::mf_Greedy_Projection_Triangulation(const PointCloud<PointXYZRG
     gp3.setInputCloud (mv_PointNormal1);
     gp3.setSearchMethod (tree2);
     gp3.reconstruct (*triangles);
-    std::vector<int> parts = gp3.getPartIDs();
-    std::vector<int> states = gp3.getPointStates();
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(triangles,mv_MeshesOutput1);
