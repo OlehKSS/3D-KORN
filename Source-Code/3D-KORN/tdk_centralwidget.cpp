@@ -150,6 +150,7 @@ void TDK_CentralWidget::mf_SetupPointCloudOperationsWidget()
     mv_MeshAlgorithmComboBox->addItem("Poisson", "Poisson");
     mv_MeshAlgorithmComboBox->addItem("Greedy Triangulation", "Greedy Triangulation");
     mv_MeshAlgorithmComboBox->addItem("Grid Projection", "Grid Projection");
+    mv_MeshAlgorithmComboBox->addItem("Marching Cubes", "Marching Cubes");
 
     mv_GenerateMeshPushButton->setFixedHeight(22);
     mv_GenerateMeshPushButton->setMinimumWidth(300);
@@ -226,6 +227,7 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
                 if(mv_MeshAlgorithmComboBox->currentText() == "Poisson"){TDK_Meshing::mf_Poisson(pointcloud, meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Greedy Triangulation"){TDK_Meshing::mf_Greedy_Projection_Triangulation(pointcloud, meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Grid Projection"){TDK_Meshing::mf_Grid_Projection(pointcloud,meshPtr);}
+                else if (mv_MeshAlgorithmComboBox->currentText() == "Marching Cubes"){TDK_Meshing::mf_Marching_Cubes(pointcloud,meshPtr);}
                 TDK_Database::mf_StaticAddMesh(meshPtr);
                 emit mf_SignalMeshListUpdated();
             }
@@ -239,6 +241,7 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
                 if(mv_MeshAlgorithmComboBox->currentText() == "Poisson"){TDK_Meshing::mf_Poisson(pointcloud, meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Greedy Triangulation"){TDK_Meshing::mf_Greedy_Projection_Triangulation(pointcloud, meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Grid Projection"){TDK_Meshing::mf_Grid_Projection(pointcloud,meshPtr);}
+                else if (mv_MeshAlgorithmComboBox->currentText() == "Marching Cubes"){TDK_Meshing::mf_Marching_Cubes(pointcloud,meshPtr);}
                 TDK_Database::mf_StaticAddMesh(meshPtr);
                 emit mf_SignalMeshListUpdated();
             }
