@@ -68,7 +68,6 @@ void TDK_2DFeatureDetection::getMatchedFeatures(const pcl::PointCloud<pcl::Point
     //calculating maximum possible vertical shift, images should be approximately on the same level
 
     if ((abs(maxTrainImgColorCoords.Y - maxQueryImgColorCoords.Y) / maxTrainImgColorCoords.Y) < maxVerticalShift)
-            //&& (abs(minTrainImgColorCoords.Y - minQueryImgColorCoords.Y) / minTrainImgColorCoords.Y) < maxVerticalShift)
     {
         int trainImgHeight = maxTrainImgColorCoords.Y - minTrainImgColorCoords.Y;
         int queryImgHeight = maxQueryImgColorCoords.Y - minQueryImgColorCoords.Y;
