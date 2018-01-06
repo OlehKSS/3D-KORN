@@ -42,6 +42,7 @@ void TDK_Meshing::mf_NormalEstimation(PointCloud<PointXYZ>::Ptr &mv_PointCloudIn
 
     cout << "combine points and normals" << endl;
     pcl::concatenateFields(*mv_PointCloudInput, *mv_CloudNormals, *mv_PointNormalOutput);
+    qDebug()<<"normal estimation finished";
 }
 
 
@@ -57,13 +58,9 @@ void TDK_Meshing::mf_Poisson(const PointCloud<PointXYZ>::Ptr &mv_PointCloudInput
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_downsampled (new pcl::PointCloud<pcl::PointXYZ>);
     TDK_Filters::mf_FilterVoxelGridDownsample(mv_PointCloudInput, mv_cloud_downsampled, 0.01);
     
-    //Perform outlier removal
-    pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_filtered (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_cloud_downsampled, mv_cloud_filtered, 5);
-    
     //Apply the MLS smoothing filter
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_smoothed (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterMLSSmoothing(mv_cloud_filtered, mv_cloud_smoothed, 0.03);
+    TDK_Filters::mf_FilterMLSSmoothing(mv_cloud_downsampled, mv_cloud_smoothed, 0.03);
 
     //Obtain a normal point estimation
     pcl::PointCloud<pcl::PointNormal>::Ptr mv_PointNormal1(new pcl::PointCloud<pcl::PointNormal>());
@@ -86,7 +83,7 @@ void TDK_Meshing::mf_Poisson(const PointCloud<PointXYZ>::Ptr &mv_PointCloudInput
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh, mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside poisson";
 }
 
 void TDK_Meshing::mf_Poisson(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudInputRGB,
@@ -99,14 +96,10 @@ void TDK_Meshing::mf_Poisson(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudIn
     //Perform downsampling
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_downsampled (new pcl::PointCloud<pcl::PointXYZ>);
     TDK_Filters::mf_FilterVoxelGridDownsample(mv_PointCloudInput, mv_cloud_downsampled, 0.01);
-
-    //Perform outlier removal
-    pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_filtered (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_cloud_downsampled, mv_cloud_filtered, 5);
-
+    
     //Apply the MLS smoothing filter
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_smoothed (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterMLSSmoothing(mv_cloud_filtered, mv_cloud_smoothed, 0.03);
+    TDK_Filters::mf_FilterMLSSmoothing(mv_cloud_downsampled, mv_cloud_smoothed, 0.03);
 
     //Obtain a normal point estimation
     pcl::PointCloud<pcl::PointNormal>::Ptr mv_PointNormal1(new pcl::PointCloud<pcl::PointNormal>());
@@ -129,7 +122,7 @@ void TDK_Meshing::mf_Poisson(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudIn
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh, mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside poisson";
 }
 
 void TDK_Meshing::mf_Greedy_Projection_Triangulation(const PointCloud<PointXYZ>::Ptr &mv_PointCloudInput,
@@ -175,7 +168,7 @@ void TDK_Meshing::mf_Greedy_Projection_Triangulation(const PointCloud<PointXYZ>:
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh,mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside greedy triangulation";
 }
 
 void TDK_Meshing::mf_Greedy_Projection_Triangulation(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudInputRGB,
@@ -189,13 +182,9 @@ void TDK_Meshing::mf_Greedy_Projection_Triangulation(const PointCloud<PointXYZRG
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_downsampled (new pcl::PointCloud<pcl::PointXYZ>);
     TDK_Filters::mf_FilterVoxelGridDownsample(mv_PointCloudInput, mv_cloud_downsampled, 0.01);
     
-    //Perform outlier removal
-    pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_filtered (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_cloud_downsampled, mv_cloud_filtered, 5);
-    
     //Apply the MLS smoothing filter
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_smoothed (new  pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterMLSSmoothing(mv_cloud_filtered, mv_cloud_smoothed, 0.03);
+    TDK_Filters::mf_FilterMLSSmoothing(mv_cloud_downsampled, mv_cloud_smoothed, 0.03);
 
     //Obtain a normal point estimation
     pcl::PointCloud<pcl::PointNormal>::Ptr mv_PointNormal1(new pcl::PointCloud<pcl::PointNormal>());
@@ -224,7 +213,7 @@ void TDK_Meshing::mf_Greedy_Projection_Triangulation(const PointCloud<PointXYZRG
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh,mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside greedy triangulation";
 }
 
 void TDK_Meshing::mf_Grid_Projection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &mv_PointCloudInput,
@@ -258,11 +247,12 @@ void TDK_Meshing::mf_Grid_Projection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh,mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside grid projection";
 
 }
 
 void TDK_Meshing::mf_Grid_Projection(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &mv_PointCloudInputRGB, pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
+    
     //Convert from RGBXYZ to XYZ
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_PointCloudInput  (new pcl::PointCloud<pcl::PointXYZ>) ;
     TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(mv_PointCloudInputRGB, mv_PointCloudInput) ;
@@ -295,16 +285,20 @@ void TDK_Meshing::mf_Grid_Projection(const pcl::PointCloud<pcl::PointXYZRGB>::Pt
 
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh,mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside grid projection";
 
 }
 
 void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZ>::Ptr &mv_PointCloudInput,
                                      pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
     
+    //Perform statistical outlier removal
+    pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
+    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_PointCloudInput, mv_cloud_filtered, 0.1);
+    
     //Perform downsampling
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_downsampled (new pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterVoxelGridDownsample(mv_PointCloudInput, mv_cloud_downsampled, 0.1);
+    TDK_Filters::mf_FilterVoxelGridDownsample(mv_cloud_filtered, mv_cloud_downsampled, 0.1);
     
     //Apply the MLS smoothing filter
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_smoothed (new  pcl::PointCloud<pcl::PointXYZ>);
@@ -324,14 +318,14 @@ void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZ>::Ptr &m
     
     marching.setInputCloud(mv_PointNormal1);
     marching.setIsoLevel(0);
-    marching.setGridResolution(0.1,0.1,0.1);
+    marching.setGridResolution(75,75,75);
     marching.setPercentageExtendGrid (0.3f);
     marching.setSearchMethod(tree2);
     marching.reconstruct(*mesh);
     
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh,mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside marching cubes";
     
 }
 
@@ -341,9 +335,13 @@ void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_PointCloudInput  (new pcl::PointCloud<pcl::PointXYZ>) ;
     TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(mv_PointCloudInputRGB, mv_PointCloudInput) ;
     
+    //Perform statistical outlier removal
+    pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_filtered (new pcl::PointCloud<pcl::PointXYZ>);
+    TDK_Filters::mf_FilterStatisticalOutlierRemoval(mv_PointCloudInput, mv_cloud_filtered, 0.1);
+    
     //Perform downsampling
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_downsampled (new pcl::PointCloud<pcl::PointXYZ>);
-    TDK_Filters::mf_FilterVoxelGridDownsample(mv_PointCloudInput, mv_cloud_downsampled, 0.1);
+    TDK_Filters::mf_FilterVoxelGridDownsample(mv_cloud_filtered, mv_cloud_downsampled, 0.1);
     
     //Apply the MLS smoothing filter
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_cloud_smoothed (new  pcl::PointCloud<pcl::PointXYZ>);
@@ -363,13 +361,13 @@ void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr
     
     marching.setInputCloud(mv_PointNormal1);
     marching.setIsoLevel(0);
-    marching.setGridResolution(0.1,0.1,0.1);
+    marching.setGridResolution(75,75,75);
     marching.setPercentageExtendGrid (0.3f);
     marching.setSearchMethod(tree2);
     marching.reconstruct(*mesh);
     
     //Laplacian Smoothing of mesh
     TDK_Filters::mf_FilterLaplacianSmoothing(mesh,mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"inside marching cubes";
     
 }

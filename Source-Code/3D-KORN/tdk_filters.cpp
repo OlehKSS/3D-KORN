@@ -161,6 +161,7 @@ void TDK_Filters::mf_FilterMLSSmoothing(const pcl::PointCloud<PointXYZ>::Ptr &cl
     mls.setSearchRadius(searchradius); //Set sphere radius used for k-space nearest neighbors
     mls.process(mls_points);
     pcl::copyPointCloud(mls_points, *cloud_smoothed); //convert from XYZNormals to XYZ
+    qDebug()<<"finished MLS Smoothing";
 }
 
 //Laplacian Filter Smoothing:
