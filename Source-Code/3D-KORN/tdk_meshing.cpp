@@ -336,7 +336,7 @@ void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZ>::Ptr &m
     
     marching.setInputCloud(mv_PointNormal1);
     marching.setIsoLevel(0);
-    marching.setGridResolution(30,30,30);
+    marching.setGridResolution(10,10,10);
     marching.setPercentageExtendGrid (0.3f);
     marching.setSearchMethod(tree2);
     marching.reconstruct(*mesh);
