@@ -43,7 +43,7 @@ public:
     static void mf_Grid_Projection(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudInputRGB,
                                        pcl::PolygonMesh::Ptr &mv_MeshesOutput);
     
-    static void mf_Marching_Cubes(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudInput,
+    static void mf_Marching_Cubes(const PointCloud<PointXYZ>::Ptr &mv_PointCloudInput,
                                        pcl::PolygonMesh::Ptr &mv_MeshesOutput);
     static void mf_Marching_Cubes(const PointCloud<PointXYZRGB>::Ptr &mv_PointCloudInputRGB,
                                        pcl::PolygonMesh::Ptr &mv_MeshesOutput);

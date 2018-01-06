@@ -266,8 +266,7 @@ void TDK_Meshing::mf_Grid_Projection(const pcl::PointCloud<pcl::PointXYZ>::Ptr &
 
 }
 
-void TDK_Meshing::mf_Grid_Projection(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &mv_PointCloudInputRGB,
-                                     pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
+void TDK_Meshing::mf_Grid_Projection(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &mv_PointCloudInputRGB, pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
     //Convert from RGBXYZ to XYZ
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_PointCloudInput  (new pcl::PointCloud<pcl::PointXYZ>) ;
     TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(mv_PointCloudInputRGB, mv_PointCloudInput) ;
@@ -348,8 +347,7 @@ void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZ>::Ptr &m
     
 }
 
-void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &mv_PointCloudInputRGB,
-                                    pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
+void TDK_Meshing::mf_Marching_Cubes(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &mv_PointCloudInputRGB, pcl::PolygonMesh::Ptr &mv_MeshesOutput1){
     //Convert from RGBXYZ to XYZ
     pcl::PointCloud<pcl::PointXYZ>::Ptr mv_PointCloudInput  (new pcl::PointCloud<pcl::PointXYZ>) ;
     TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(mv_PointCloudInputRGB, mv_PointCloudInput) ;
