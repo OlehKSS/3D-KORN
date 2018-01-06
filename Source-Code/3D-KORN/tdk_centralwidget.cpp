@@ -219,6 +219,7 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
     if(mv_numberOfPointCloudsSelected > 0){
         for (int i=0, len = mv_PointCloudListTab->count(); i < len; i++){
             if(mv_PointCloudListTab->item(i)->checkState() == Qt::Checked){
+                mf_SlotUpdateStatusBar(tr("Meshing started..."), QColor(Qt::red))
                 pcl::PolygonMesh::Ptr meshPtr ( new PolygonMesh );
                 pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud ( new pcl::PointCloud<pcl::PointXYZ> ());
                 TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(TDK_Database::mv_PointCloudsVector[i]->makeShared(), pointcloud);
@@ -231,6 +232,7 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
         }
         for (int i=0, len = mv_RegisteredPointCloudListTab->count(); i < len; i++){
             if(mv_RegisteredPointCloudListTab->item(i)->checkState() == Qt::Checked){
+                mf_SlotUpdateStatusBar(tr("Meshing started..."), QColor(Qt::red))
                 pcl::PolygonMesh::Ptr meshPtr ( new PolygonMesh );
                 pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud ( new pcl::PointCloud<pcl::PointXYZ> ());
                 TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(TDK_Database::mv_RegisteredPointCloudsVector[i]->makeShared(), pointcloud);

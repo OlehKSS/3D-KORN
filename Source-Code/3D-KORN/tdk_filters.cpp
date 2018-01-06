@@ -177,5 +177,5 @@ void TDK_Filters::mf_FilterLaplacianSmoothing(const boost::shared_ptr<pcl::Polyg
     laplacian.setFeatureAngle(M_PI/5);
     laplacian.setBoundarySmoothing(true);
     laplacian.process(*mv_MeshesOutput1);
-    qDebug()<<"Triangulation Finished";
+    qDebug()<<"Laplacian smoothing Finished";
 }
