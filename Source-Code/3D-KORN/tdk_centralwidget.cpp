@@ -245,8 +245,8 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
                 TDK_Database::mf_StaticAddMesh(meshPtr);
                 emit mf_SignalMeshListUpdated();
             }
+        mf_SlotUpdateStatusBar(tr("Meshing finished"), QColor(Qt::darkGreen));
         }
-    mf_SlotUpdateStatusBar(tr("Meshing finished"), QColor(Qt::darkGreen));
     }
     else{
         QMessageBox::warning(this, QString("u2.cloud"), QString("Please select at least one point cloud from explorer widget to generate mesh."));
