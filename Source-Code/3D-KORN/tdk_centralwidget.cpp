@@ -100,7 +100,7 @@ void TDK_CentralWidget::mf_SetupPointCloudDisplayWidget()
     mv_CentralGridLayout->addWidget(dockWidget, 0, 1, 2, 1);
 
     mv_PointCloudVisualizer.reset (new pcl::visualization::PCLVisualizer ("viewer", false));
-    mv_PointCloudVisualizer->setBackgroundColor (0.1, 0.1, 0.1);
+    mv_PointCloudVisualizer->setBackgroundColor (0.5, 0.5, 0.5);
     mv_PointCloudVisualizer->addCoordinateSystem(1.0);
     mv_PointCloudQVTKWidget->SetRenderWindow ( mv_PointCloudVisualizer->getRenderWindow () );
     mv_PointCloudVisualizer->setupInteractor ( mv_PointCloudQVTKWidget->GetInteractor (), mv_PointCloudQVTKWidget->GetRenderWindow ());
@@ -138,7 +138,9 @@ void TDK_CentralWidget::mf_SetupPointCloudOperationsWidget()
     QWidget *widget = new QWidget;
 
     mv_RegistrationComboBox->setFixedHeight(22);
-    mv_RegistrationComboBox->addItem("SVD + ICP", "SVD");
+
+    mv_RegistrationComboBox->addItem("ICP with normals", "ICP with normals");
+    mv_RegistrationComboBox->addItem("ICP", "ICP");
 
     mv_RegistrationPushButton->setFixedHeight(22);
     mv_RegistrationPushButton->setMinimumWidth(300);
@@ -200,10 +202,21 @@ void TDK_CentralWidget::mf_SlotRegisterPointCloud()
                 mv_ScanRegistration->addNextPointCloud(TDK_Database::mv_RegisteredPointCloudsVector[i], 0);
             }
         }
+
+        if (mv_2DFeatureDetectionCheckBox->checkState() == Qt::Checked)
+           mv_ScanRegistration->mv_use2DFeatureDetection = true;
+        else
+            mv_ScanRegistration->mv_use2DFeatureDetection = false;
+
+        if (mv_RegistrationComboBox->currentText() == "ICP")
+            mv_ScanRegistration->mv_ICP_Normals = false;
+
+
         TDK_Database::mf_StaticAddRegisteredPointCloud(mv_ScanRegistration->Process_and_getAlignedPC()->makeShared());
         emit mf_SignalRegisteredPointCloudListUpdated();
     }
-    else{
+    else
+    {
         QMessageBox::warning(this, QString("u2.cloud"), QString("Please select at least two point clouds from explorer widget to register."));
     }
 }
@@ -224,10 +237,13 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
                 pcl::PolygonMesh::Ptr meshPtr ( new PolygonMesh );
                 pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud ( new pcl::PointCloud<pcl::PointXYZ> ());
                 TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(TDK_Database::mv_PointCloudsVector[i]->makeShared(), pointcloud);
+
                 if(mv_MeshAlgorithmComboBox->currentText() == "Poisson"){TDK_Meshing::mf_Poisson(pointcloud, meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Greedy Triangulation"){TDK_Meshing::mf_Greedy_Projection_Triangulation(pointcloud, meshPtr);}
+
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Grid Projection"){TDK_Meshing::mf_Grid_Projection(pointcloud,meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Marching Cubes"){TDK_Meshing::mf_Marching_Cubes(pointcloud,meshPtr);}
+
                 TDK_Database::mf_StaticAddMesh(meshPtr);
                 emit mf_SignalMeshListUpdated();
             }
@@ -238,10 +254,13 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
                 pcl::PolygonMesh::Ptr meshPtr ( new PolygonMesh );
                 pcl::PointCloud<pcl::PointXYZ>::Ptr pointcloud ( new pcl::PointCloud<pcl::PointXYZ> ());
                 TDK_Meshing::mf_ConvertFromXYZRGBtoXYZ(TDK_Database::mv_RegisteredPointCloudsVector[i]->makeShared(), pointcloud);
+
                 if(mv_MeshAlgorithmComboBox->currentText() == "Poisson"){TDK_Meshing::mf_Poisson(pointcloud, meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Greedy Triangulation"){TDK_Meshing::mf_Greedy_Projection_Triangulation(pointcloud, meshPtr);}
+
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Grid Projection"){TDK_Meshing::mf_Grid_Projection(pointcloud,meshPtr);}
                 else if (mv_MeshAlgorithmComboBox->currentText() == "Marching Cubes"){TDK_Meshing::mf_Marching_Cubes(pointcloud,meshPtr);}
+
                 TDK_Database::mf_StaticAddMesh(meshPtr);
                 emit mf_SignalMeshListUpdated();
             }
@@ -249,7 +268,9 @@ void TDK_CentralWidget::mf_SlotGenerateMesh()
         }
     }
     else{
+
         QMessageBox::warning(this, QString("u2.cloud"), QString("Please select at least one point cloud from explorer widget to generate mesh."));
+
     }
 }
 
@@ -320,7 +341,8 @@ void TDK_CentralWidget::mf_SlotUpdatePointCloudDisplay(QListWidgetItem *item)
             }
         }
     }
-    else{
+    else
+    {
         qDebug() << item->text() << "Item unchecked";
         mv_PointCloudVisualizer->removePointCloud(item->text().toStdString());
         mv_numberOfPointCloudsSelected--;

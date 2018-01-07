@@ -19,9 +19,12 @@
 #include <pcl/registration/incremental_registration.h>
 #include <pcl/registration/transformation_estimation_svd.h>
 #include <vector>
+
 #include <QColor>
 #include <QObject>
 #include <QString>
+
+
 
 #include "tdk_2dfeaturedetection.h"
 
@@ -79,6 +82,12 @@ void tdk_PointCloudXYZRGBtoXYZI(
         );
 
 
+void copyColor2XYZ(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud_in,
+                   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_out);
+
+boost::shared_ptr<pcl::visualization::PCLVisualizer> rgbVis (pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud);
+
+
 class TDK_ScanRegistration: public QObject
 {
     Q_OBJECT
@@ -88,6 +97,9 @@ public:
     TDK_ScanRegistration(const pcl::PointWithViewpoint scannerCenter,
                          const bool registerInRealTime);
     ~TDK_ScanRegistration();
+
+    bool mv_use2DFeatureDetection = false;
+    bool mv_ICP_Normals = true;
 
     //Input
     bool addNextPointCloud(const pcl::PointCloud<pcl::PointXYZRGB>::Ptr &inputPointcloud,
@@ -107,6 +119,7 @@ public:
 
     vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr>* getRotationCompensatedPCs();
     vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr>* getRoughlyAlignedPCs();
+
 
 
     static pcl::PointCloud<pcl::PointXYZ>::Ptr
@@ -156,13 +169,15 @@ signals:
     void mf_SignalStatusChanged(QString, QColor);
 
 public slots:
-    void set_Use2DFeatureDetection(int);
+    //void set_Use2DFeatureDetection(int);
+
 
 
 private:
     //Class operation configuration
     bool mv_registerInRealTime;
-    bool mv_use2DFeatureDetection = false;
+
+
 
     //Configuration parameters
     float mv_normalRadiusSearch;
@@ -229,6 +244,12 @@ private:
                            const pcl::PointCloud<pcl::PointXYZ>::Ptr &target,
                            pcl::CorrespondencesPtr correspondences,
                            Eigen::Matrix4f &transformation_matrix);
+
+    void MatchRegistration(pcl::PointCloud<pcl::PointXYZRGB>::Ptr refCloud,
+                           pcl::PointCloud<pcl::PointXYZRGB>::Ptr sampleCloud,
+                           pcl::PointCloud<pcl::PointXYZ>::Ptr refMatch,
+                           pcl::PointCloud<pcl::PointXYZ>::Ptr sampleMatch,
+                           pcl::PointCloud<pcl::PointXYZRGB>::Ptr fusedCloud);
 };
 
 #endif // TDK_SCANREGISTRATION_H
