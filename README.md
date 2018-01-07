@@ -1,5 +1,5 @@
 # u2.cloud
-This Project is based on the [3D-KORN](https://github.com/umaatgithub/3D-KORN) source code with additions from other projects. Link to [Google drive](https://drive.google.com/open?id=1vTh9i1YlImyutLh-R7irdySyy8wlPgU3DlFDgoW0new)
+This Project is based on the [3D-KORN](https://github.com/umaatgithub/3D-KORN) source code with additions from other projects. Link to [Google drive](https://drive.google.com/drive/folders/1vTklBGX-M-kzbsIDLchjZRKWdAgUmDJl?usp=sharing)
 
 
 # General Guides
